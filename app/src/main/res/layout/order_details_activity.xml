@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llCategory"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/White_White">
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingBottom="@dimen/_5sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:text="@string/orders"
+        android:textColor="@color/Black"
+        android:textSize="@dimen/_17sdp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_Order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title_tv"
+        android:paddingLeft="@dimen/_3sdp"
+        android:paddingRight="@dimen/_3sdp"
+        android:scrollbars="vertical">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/empty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textColor="@color/Black"
+        android:textSize="@dimen/_15sdp"
+        android:visibility="gone" />
+</RelativeLayout>

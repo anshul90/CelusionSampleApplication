@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">CelusionApplication</string>
+    <string name="customers">Customers</string>
+    <string name="orders">Orders</string>
+</resources>
