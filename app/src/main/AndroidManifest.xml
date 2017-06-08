@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.anshul.celusionapplication">
+    package="com.anshul.celusiontestapplication">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Screens.CustomerActivity"
+            android:name="com.anshul.celusiontestapplication.Screens.SplashScreenActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Screens.OrderDetailActivity"></activity>
+        <activity android:name="com.anshul.celusiontestapplication.Screens.OrderDetailActivity"></activity>
+        <activity android:name="com.anshul.celusiontestapplication.Screens.CustomerActivity"></activity>
     </application>
 
 </manifest>

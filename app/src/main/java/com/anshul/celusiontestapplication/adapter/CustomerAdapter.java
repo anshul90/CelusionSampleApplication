@@ -1,4 +1,4 @@
-package com.anshul.celusionapplication.adapter;
+package com.anshul.celusiontestapplication.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.anshul.celusionapplication.R;
-import com.anshul.celusionapplication.Screens.OrderDetailActivity;
-import com.anshul.celusionapplication.models.MobiInventory;
+import com.anshul.celusiontestapplication.R;
+import com.anshul.celusiontestapplication.Screens.OrderDetailActivity;
+import com.anshul.celusiontestapplication.models.MobiInventory;
 
 import java.util.List;
 
@@ -20,13 +20,16 @@ import java.util.List;
  */
 
 public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyViewHolder> {
-
     Context mContext;
+    String mLatitudeLabel, mLongitudeLabel;
     private List<MobiInventory> mMobiInventoryList;
 
-    public CustomerAdapter(List<MobiInventory> mobiInventoryModelList, Context context) {
+    public CustomerAdapter(List<MobiInventory> mobiInventoryModelList, Context context,
+                           String mLatitudeLabel, String mLongitudeLabel) {
         mMobiInventoryList = mobiInventoryModelList;
         mContext = context;
+        this.mLatitudeLabel = mLatitudeLabel;
+        this.mLongitudeLabel = mLongitudeLabel;
     }
 
     @Override
@@ -56,6 +59,8 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
             public void onClick(View v) {
                 Intent in = new Intent(v.getContext(), OrderDetailActivity.class);
                 in.putExtra("CustomerID", mMobiInventoryList.get(position).getCustomerID());
+                in.putExtra("latitude", mLatitudeLabel);
+                in.putExtra("longitude", mLongitudeLabel);
                 v.getContext().startActivity(in);
             }
         });
@@ -71,12 +76,12 @@ public class CustomerAdapter extends RecyclerView.Adapter<CustomerAdapter.MyView
         public TextView tContactName, tCompanyName, tCountry,/*tPostal,*/
                 tPhone;
         public LinearLayout ll;
+
         public MyViewHolder(View v) {
             super(v);
             tContactName = (TextView) v.findViewById(R.id.tvContactName);
             tCompanyName = (TextView) v.findViewById(R.id.tvCompanyName);
             tCountry = (TextView) v.findViewById(R.id.tvCountry);
-            // tPostal = (TextView) v.findViewById(R.id.tvPostalCode);
             tPhone = (TextView) v.findViewById(R.id.tvPhone);
             ll = (LinearLayout) v.findViewById(R.id.ll);
 

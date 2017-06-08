@@ -1,5 +1,6 @@
-package com.anshul.celusionapplication.Screens;
+package com.anshul.celusiontestapplication.Screens;
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,11 +19,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.anshul.celusionapplication.R;
-import com.anshul.celusionapplication.adapter.OrderAdapter;
-import com.anshul.celusionapplication.database.DatabaseHandler;
-import com.anshul.celusionapplication.models.MobiOrderDetail;
-import com.anshul.celusionapplication.utils.AppUtils;
+import com.anshul.celusiontestapplication.R;
+import com.anshul.celusiontestapplication.adapter.OrderAdapter;
+import com.anshul.celusiontestapplication.database.DatabaseHandler;
+import com.anshul.celusiontestapplication.models.MobiOrderDetail;
+import com.anshul.celusiontestapplication.utils.AppUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -45,11 +46,14 @@ public class OrderDetailActivity extends AppCompatActivity {
     String CustomerId;
     MobiOrderDetail mobiOrderDetail;
     DatabaseHandler databaseHandler;
+    ProgressDialog pDialogVolley;
     private RecyclerView mRecyclerView;
     private OrderAdapter mAdapter;
     private LinearLayoutManager mLinearLayoutManager;
     private List<MobiOrderDetail> mobiOrderDetailList = new ArrayList<>();
     private TextView empty_textView;
+    private String mLatitudeLabel;
+    private String mLongitudeLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +69,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             CustomerId = bundle.getString("CustomerID");
+            mLatitudeLabel = bundle.getString("latitude");
+            mLongitudeLabel = bundle.getString("longitude");
         }
 
         if (AppUtils.hasNetworkConnection(this)) {
@@ -89,8 +95,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 mobiOrderDetail = new MobiOrderDetail();
                 mobiOrderDetail.setShipCountry(cursor.getString(3));
                 mobiOrderDetail.setOrderID(cursor.getString(1));
-                mobiOrderDetail.setOrderDate(cursor.getString(2));
-                mobiOrderDetail.setShipAddress(cursor.getString(4));
+                mobiOrderDetail.setOrderDate(cursor.getString(4));
+                mobiOrderDetail.setShipAddress(cursor.getString(2));
                 mobiOrderDetailList.add(mobiOrderDetail);
             }
             mAdapter = new OrderAdapter(mobiOrderDetailList, OrderDetailActivity.this);
@@ -103,12 +109,19 @@ public class OrderDetailActivity extends AppCompatActivity {
     }
 
     private void requestVolleyToGetOrderDetails(String url) {
+        pDialogVolley = new ProgressDialog(this);
+        if (AppUtils.hasNetworkConnection(this)) {
+            pDialogVolley.setMessage("please_wait");
+        } else {
+            pDialogVolley.setMessage("please_wait_low_connectivity");
 
+        }
+        pDialogVolley.show();
         JsonArrayRequest jsObjRequest = new JsonArrayRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-
+                        pDialogVolley.hide();
                         if (response != null && response.length() > 0) {
                             // MobiInventory feedListBean = new Gson().fromJson(String.valueOf(response), MobiInventory.class);
                             Type listType = new TypeToken<List<MobiOrderDetail>>() {
@@ -141,6 +154,7 @@ public class OrderDetailActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        pDialogVolley.hide();
                         String json = null;
                         //8888 String errorMsg = error.networkResponse.data;
                         NetworkResponse response = error.networkResponse;
@@ -191,20 +205,26 @@ public class OrderDetailActivity extends AppCompatActivity {
                 String credentials = un + ":" + pw;
                 String auth = "Basic "
                         + Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-                header.put("lat", "12.971599");
-                header.put("long", "77.594563");
+                header.put("lat", mLatitudeLabel);
+                header.put("long", mLongitudeLabel);
                 header.put("Authorization", auth);
                 return header;
             }
 
             @Override
             protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
-                //mStatusCode = response.statusCode;
-//                Log.i("statusCode", String.valueOf(mStatusCode));
                 return super.parseNetworkResponse(response);
             }
         };
         requestQueue.add(jsObjRequest);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (pDialogVolley != null && pDialogVolley.isShowing()) {
+            pDialogVolley.cancel();
+        }
     }
 }

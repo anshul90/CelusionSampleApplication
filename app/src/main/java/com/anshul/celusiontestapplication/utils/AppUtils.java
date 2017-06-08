@@ -1,4 +1,4 @@
-package com.anshul.celusionapplication.utils;
+package com.anshul.celusiontestapplication.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

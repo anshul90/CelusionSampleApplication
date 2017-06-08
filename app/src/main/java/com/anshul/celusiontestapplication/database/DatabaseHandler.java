@@ -1,4 +1,4 @@
-package com.anshul.celusionapplication.database;
+package com.anshul.celusiontestapplication.database;
 
 import android.content.ContentValues;
 import android.content.Context;
